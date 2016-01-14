@@ -5,10 +5,11 @@
 //  Created by Ian Murphy on 1/9/16.
 //  Copyright © 2016 Ian Murphy. All rights reserved.
 //
-#pragma once
+#ifndef ARRAY2D_H
+#define ARRAY2D_H
 #include "Row.h"
+#include "Array.h"
 #include "Exception.h"
-class Cell;
 template <typename T>
 class Array2D
 {
@@ -29,51 +30,34 @@ public:
     T & Select(int row, int col);
     
 private:
-    T ** DuplicateArray(int rows, int cols) const;
-    void Alter(int rows, int cols);
-    void Obliterate();
-    T ** m_array;
+    Array<T> m_array;
     int _row;
     int _col;
+    
+    void Alter(int rows, int cols);
 };
 
 template <typename T>
 Array2D<T>::Array2D() : _col(0), _row(0)
 {
-    m_array = nullptr;;
+    m_array.setLength(0);
 }
 
 template <typename T>
 Array2D<T>::Array2D(int row, int col) : _col(col), _row(row)
 {
-    if(row < 1 || col < 1)
-        throw Exception("InvalidSizeException");
-    m_array = new T*[row];
-    for(int i = 0; i< row; i++)
-    {
-        m_array[i] = new T[col];
-    }
-    
+    m_array.setLength(row*col);
 }
 
 template <typename T>
-Array2D<T>::Array2D(const Array2D<T> & cp) : _col(cp._col), _row(cp._row), m_array(nullptr)
+Array2D<T>::Array2D(const Array2D<T> & cp) : _col(cp._col), _row(cp._row), m_array(cp.m_array)
 {
-    if(cp.m_array)
-    {
-        m_array = cp.DuplicateArray(_row, _col);
-    }
     
 }
 
 template <typename T>
 Array2D<T>::~Array2D()
 {
-    for(int row = 0; row<_row; row++)
-    {
-        delete [] m_array[row];
-    }
-    delete [] m_array;
 }
 
 
@@ -82,33 +66,24 @@ Array2D<T> & Array2D<T>::operator=(const Array2D<T> &rhs)
 {
     if(this != &rhs)
     {
-        Obliterate();
-        m_array = rhs.DuplicateArray(rhs._row, rhs._col);
         _row = rhs._row;
         _col = rhs._col;
+        m_array = rhs.m_array;
     }
     return *this;
-}
-
-
-template <typename T>
-Row<T> Array2D<T>::operator[](int index)
-{
-    if(index >= _row)
-        throw Exception("OutofBoundsException");
-    
-    return Row<T>(*this, index);
 }
 
 template <typename T>
 const Row<T> Array2D<T>::operator[](int index) const
 {
-    if(index >= _row)
-        throw Exception("OutofBoundsException");
     return Row<T> (*this, index);
 }
 
-
+template <typename T>
+Row<T> Array2D<T>::operator[](int index)
+{
+    return Row<T> (*this, index);
+}
 
 
 template <typename T>
@@ -127,6 +102,7 @@ void Array2D<T>::setRow(int rows)
     else if(rows > 0)
     {
         Alter(rows, _col);
+//        _row = rows;
     }
     else{
         throw Exception("InvalidRowNumberException");
@@ -149,6 +125,7 @@ void Array2D<T>::setColumn(int col)
     else if(col > 0)
     {
         Alter(_row, col);
+//        _col = col;
     }
     else{
         throw Exception("InvalidColumnNumberException");
@@ -158,38 +135,7 @@ void Array2D<T>::setColumn(int col)
 template <typename T>
 T & Array2D<T>::Select(int row, int col)
 {
-    return m_array[row][col];
-}
-
-template <typename T>
-T ** Array2D<T>::DuplicateArray(int rows, int cols) const
-{
-    T ** newArray = nullptr;
-    if(rows > 0 && cols > 0)
-    {
-        
-        newArray = new T*[rows];
-        for(int i = 0; i< rows; i++)
-        {
-            newArray[i] = new T[cols];
-        }
-        
-        if(rows > _row)
-            rows = _row;        //find the smallest
-        if(cols > _col)
-            rows = _col;
-        
-        for(int row = 0; row<rows; row++)
-        {
-            for(int col = 0; col<cols; col++)
-            {
-                T h = m_array[row][col];
-                newArray[row][col] = h;
-            }
-        }
-        
-    }
-    return newArray;
+    return m_array[row*_col+col];
 }
 
 template <typename T>
@@ -208,21 +154,14 @@ void Array2D<T>::Alter(int rows, int cols)
     {
         for (int col = 0; col<l_cols; col++)
         {
-            T h = m_array[row][col];
-            newArray[row][col] = h;
-            
+            newArray[row][col] = (*this)[row][col];
         }
     }
-    *this = newArray;
+    m_array = newArray.m_array;
+    _row = newArray._row;
+    _col = newArray._col;
 }
 
-template <typename T>
-void Array2D<T>::Obliterate()
-{
-    for(int i = 0; i<_row;i++)
-    {
-        delete [] m_array[i];
-    }
-    delete [] m_array;
-    m_array = nullptr;
-}
+#endif
+
+
