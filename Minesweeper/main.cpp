@@ -15,7 +15,8 @@ using std::cout;
 using std::endl;
 
 #include <iomanip>
-
+#include <string>
+using std::string;
 #include "Gameboard.hpp"
 
 int main()
@@ -30,27 +31,28 @@ int main()
 		minesweeper.InitGame('b');
 		while (minesweeper.GameState())
 		{
-			int row = 0;
-			int col = 0;
+			string row;
+			string col;
 			minesweeper.Display();
 			cout << "\n\nEnter the row then the column of the tile.\nRow:";
-			std::cin >> row;
-			minesweeper.SelectRow(row);
+			std::getline(std::cin, row);
+			minesweeper.SelectRow(atoi(row.c_str()));
 			minesweeper.Display();
 			cout << "\n\nEnter tile to uncover. \nRow:";
 			cout << minesweeper.GetSelectedRow() << endl;
 			cout << "\nColumn: ";
-			std::cin >> col;
-			minesweeper.SelectRow(NULL);
-			if (row < minesweeper.getRows() && col < minesweeper.getCols())
+			std::getline(std::cin, col);
+			minesweeper.SelectColumn(atoi(col.c_str()));
+			if (atoi(row.c_str()) < minesweeper.getRows() && atoi(col.c_str()) < minesweeper.getCols())
 			{
-				char choice;
+				minesweeper.Display();
+				string choice;
 				cout << "Uncover or Mark? (u/m): ";
-				std::cin >> choice;
-				if (toupper(choice) == 'U')
-					minesweeper.Uncover(row, col);
-				else if (toupper(choice) == 'M')
-					minesweeper.Mark(row, col);
+				std::getline(std::cin, choice);
+				if (choice == "U" || choice == "u")
+					minesweeper.Uncover(atoi(row.c_str()), atoi(col.c_str()));
+				else if (choice == "M" || choice == "m")
+					minesweeper.Mark(atoi(row.c_str()), atoi(col.c_str()));
 				else
 				{
 

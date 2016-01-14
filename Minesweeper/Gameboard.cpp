@@ -17,6 +17,7 @@ void Gameboard::Display()
 {
 	system("cls");
 	HANDLE hStdout = 0;
+	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     cout<<"  ";
     for (int i = 1; i< board->getColumn(); i++) {
         if(i%2 == 0)
@@ -27,10 +28,7 @@ void Gameboard::Display()
     cout<<endl;
     for(int row = 1; row<board->getRow()-1; row++)
     {
-		if (row == selRow)
-		{
-			SetConsoleTextAttribute(hStdout, BACKGROUND_BLUE | FOREGROUND_INTENSITY);
-		}
+		
         if(row%2 == 0)
             cout<<setw(2)<<row;
         else
@@ -40,18 +38,23 @@ void Gameboard::Display()
 #ifdef DEBUGMODE
             cout<<setw(2)<<(*board)[row][col].getProx();
 #else
+			if (col == selCol && row == selRow)
+			{
+				SetConsoleTextAttribute(hStdout, BACKGROUND_GREEN | BACKGROUND_INTENSITY);
+			}
+			
 			if ((*board)[row][col].getExposure())
 			{
 				char output = (*board)[row][col].getProx();
 				if (output != '0')
 				{
 
-					hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+					
 					switch (output)
 					{
 
 					case '1':
-						SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_INTENSITY);
+						SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_INTENSITY );
 						break;
 
 					case '2':
@@ -81,8 +84,9 @@ void Gameboard::Display()
 					case '8':
 						SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE);
 						break;
-
-
+					case 'B':
+						SetConsoleTextAttribute(hStdout, BACKGROUND_RED | BACKGROUND_INTENSITY);
+						break;
 					}
 					cout << setw(2) << output;
 					SetConsoleTextAttribute(hStdout, 7);
@@ -102,7 +106,7 @@ void Gameboard::Display()
 				else
 					cout<<setw(2)<<"#";
 			}
-				
+			SetConsoleTextAttribute(hStdout, 7);
 
             
 #endif
@@ -200,6 +204,11 @@ int Gameboard::getCols()
 void Gameboard::SelectRow(int row)
 {
 	selRow = row;
+}
+
+void Gameboard::SelectColumn(int col)
+{
+	selCol = col;
 }
 
 int Gameboard::GetSelectedRow()
