@@ -15,6 +15,7 @@ Gameboard::Gameboard(): board(nullptr)
 
 void Gameboard::Display()
 {
+	cout << endl;
     cout<<"  ";
     for (int i = 1; i< board->getColumn(); i++) {
         if(i%2 == 0)
@@ -45,7 +46,7 @@ void Gameboard::Display()
                 }
             }
             else
-                cout<<setw(2)<<"#";
+                cout<<setw(2)<<"\u2610";
 
             
 #endif
