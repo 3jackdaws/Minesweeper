@@ -9,6 +9,10 @@
 #ifndef Gameboard_hpp
 #define Gameboard_hpp
 
+
+#define DEBUGMODE
+
+
 #include <cstdlib>
 #include <iostream>
 #include <ctime>
@@ -27,13 +31,16 @@ public:
     void Display();
     void Uncover(int row, int col);
     bool GameState();
+    int getRows();
+    int getCols();
     
 private:
     void PlaceMines();
     Array2D<Cell> * board;
     
     int8_t _difficulty;
-    bool _still_playing = false;
+    bool _still_playing = true;
+    
 };
 
 #endif /* Gameboard_hpp */

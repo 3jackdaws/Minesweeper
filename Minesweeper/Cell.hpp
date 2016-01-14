@@ -23,9 +23,10 @@ public:
     
     char operator ++ (int);
     char getProx();
-    char getExposure();
+    bool getExposure();
     void SetBomb();
     void SetProx(char p);
+    bool Uncover();
     
 private:
     Array2D<Cell> * _grid = nullptr;

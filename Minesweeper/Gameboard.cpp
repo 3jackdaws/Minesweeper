@@ -17,14 +17,27 @@ void Gameboard::Display()
 {
     for(int row = 1; row<board->getRow()-1; row++)
     {
-        std::cout<<setw(2)<<board->getRow() - row -1;
+        std::cout<<setw(2)<<board->getRow() - row -1<<" ";
         for (int col =1; col<board->getColumn()-1; col++)
         {
+#ifdef DEBUGMODE
+            std::cout<<setw(2)<<(*board)[row][col].getProx();
+#else
             if((*board)[row][col].getExposure())
-                std::cout<<setw(2)<<(*board)[row][col].getProx();
+            {
+                char output = (*board)[row][col].getProx();
+                if(output != '0')
+                    std::cout<<setw(2)<<output;
+                else
+                {
+                    std::cout<<setw(2)<<" ";
+                }
+            }
             else
-                std::cout<<" ";
+                std::cout<<setw(2)<<"#";
+
             
+#endif
         }
         std::cout<<std::endl;
     }
@@ -35,7 +48,7 @@ void Gameboard::Display()
     
 }
 
-void Gameboard::InitGame(int row, int col, int difficulty)
+void Gameboard::InitGame(int row, int col, char difficulty)
 {
     
     board = new Array2D<Cell>(row+2, col+2);
@@ -48,7 +61,7 @@ void Gameboard::InitGame(int row, int col, int difficulty)
             Cell init(board, row, col);
             (*board)[row][col] = init;
             
-            if(row == 0 || row == board->getColumn() || col == 0 || col == board->getColumn())
+            if(row == 0 || row == board->getColumn()-1 || col == 0 || col == board->getColumn()-1)
             {
                 (*board)[row][col].SetProx('W');
             }
@@ -72,7 +85,10 @@ void Gameboard::PlaceMines()
         col = rand()%(board->getColumn()-2)+1;
         std::srand(std::time(0)+i*(row+1));
         row = rand()%(board->getRow()-2)+1;
-        (*board)[row][col].SetBomb();
+        if((*board)[row][col].getProx() != 'B')
+            (*board)[row][col].SetBomb();
+        else
+            i--;
     }
     
 }
@@ -82,7 +98,19 @@ bool Gameboard::GameState()
     return _still_playing;
 }
 
+void Gameboard::Uncover(int row, int col)
+{
+    if((*board)[row][col].Uncover())
+    {
+        _still_playing = false;
+        std::cout<<"\nYou hit a bomb"<<std::endl;
+    }
+}
 
+int Gameboard::getRows()
+{
+    return board->getRow()-2;
+}
 
 
 

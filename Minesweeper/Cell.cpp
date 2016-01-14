@@ -8,7 +8,7 @@
 
 #include "Cell.hpp"
 
-Cell::Cell() : _grid(nullptr)
+Cell::Cell() : _grid(nullptr), _prox('W')
 {
     
 }
@@ -72,4 +72,41 @@ void Cell::SetProx(char p)
 char Cell::getProx()
 {
     return _prox;
+}
+
+bool Cell::Uncover()
+{
+    
+    bool rval = false;
+    if(_exposed == false)
+    {
+        _exposed = true;
+        
+        if(_prox == '0')
+        {
+            (*_grid)[_row][_col-1].Uncover(); //west
+            (*_grid)[_row-1][_col-1].Uncover(); //North West
+            (*_grid)[_row-1][_col].Uncover(); //north
+            (*_grid)[_row-1][_col+1].Uncover(); //north east
+            (*_grid)[_row][_col+1].Uncover(); //east
+            (*_grid)[_row+1][_col+1].Uncover(); //south east
+            (*_grid)[_row+1][_col].Uncover(); //south
+            (*_grid)[_row+1][_col-1].Uncover(); //south west
+        }
+        else if(_prox == 'B')
+        {
+            rval = true;
+        }
+        else    //not one of those
+        {
+            
+        }
+
+    }
+    return rval;
+}
+
+bool Cell::getExposure()
+{
+    return _exposed;
 }

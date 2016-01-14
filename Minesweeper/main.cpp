@@ -29,20 +29,25 @@ using std::endl;
 #include "Gameboard.hpp"
 
 
+
 int main() {
     Gameboard minesweeper;
-    minesweeper.InitGame(10, 10, 1);
-    minesweeper.Display();
+    minesweeper.InitGame(10, 10, b);
+    
+    
+    
     while(minesweeper.GameState())
     {
+        minesweeper.Display();
         cout<<"\n\nSelect tile to uncover. \nRow:";
         int row = 0;
         int col = 0;
         std::cin>>row;
         cout<<"\nColumn: ";
         std::cin>>col;
-        minesweeper.Uncover(row, col);
         
+        minesweeper.Uncover(row, col);
+        minesweeper.Display();
     }
     
 
