@@ -14,6 +14,7 @@
 
 
 #include <cstdlib>
+#include <windows.h>
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -31,16 +32,22 @@ public:
     Gameboard();
     void InitGame(char difficulty);
     void Display();
-    void Uncover(int row, int col);
+    bool Uncover(int row, int col);
     bool GameState();
     int getRows();
     int getCols();
+	void SelectRow(int);
+	void SelectColumn(int);
+	int GetSelectedRow();
+	void Mark(int row, int col);
     
 private:
     void PlaceMines(int mines);
     Array2D<Cell> * board;
     
     bool _still_playing = true;
+	int selRow;
+	int selCol;
     
 };
 

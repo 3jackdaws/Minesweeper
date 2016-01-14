@@ -15,7 +15,8 @@ Gameboard::Gameboard(): board(nullptr)
 
 void Gameboard::Display()
 {
-	cout << endl;
+	system("cls");
+	HANDLE hStdout = 0;
     cout<<"  ";
     for (int i = 1; i< board->getColumn(); i++) {
         if(i%2 == 0)
@@ -26,6 +27,10 @@ void Gameboard::Display()
     cout<<endl;
     for(int row = 1; row<board->getRow()-1; row++)
     {
+		if (row == selRow)
+		{
+			SetConsoleTextAttribute(hStdout, BACKGROUND_BLUE | FOREGROUND_INTENSITY);
+		}
         if(row%2 == 0)
             cout<<setw(2)<<row;
         else
@@ -35,24 +40,77 @@ void Gameboard::Display()
 #ifdef DEBUGMODE
             cout<<setw(2)<<(*board)[row][col].getProx();
 #else
-            if((*board)[row][col].getExposure())
-            {
-                char output = (*board)[row][col].getProx();
-                if(output != '0')
-                    cout<<setw(2)<<output;
-                else
-                {
-                    cout<<setw(2)<<" ";
-                }
-            }
-            else
-                cout<<setw(2)<<"\u2610";
+			if ((*board)[row][col].getExposure())
+			{
+				char output = (*board)[row][col].getProx();
+				if (output != '0')
+				{
+
+					hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+					switch (output)
+					{
+
+					case '1':
+						SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_INTENSITY);
+						break;
+
+					case '2':
+						SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+						break;
+
+					case '3':
+						SetConsoleTextAttribute(hStdout, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+						break;
+
+					case '4':
+						SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+						break;
+
+					case '5':
+						SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+						break;
+
+					case '6':
+						SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+						break;
+
+					case '7':
+						SetConsoleTextAttribute(hStdout, FOREGROUND_RED);
+						break;
+
+					case '8':
+						SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE);
+						break;
+
+
+					}
+					cout << setw(2) << output;
+					SetConsoleTextAttribute(hStdout, 7);
+				}
+
+
+
+				else
+				{
+					cout << setw(2) << " ";
+				}
+			}
+			else
+			{
+				if ((*board)[row][col].MarkStatus())
+					cout << setw(2) << "?";
+				else
+					cout<<setw(2)<<"#";
+			}
+				
 
             
 #endif
         }
         cout<<endl;
+		SetConsoleTextAttribute(hStdout, 7);
     }
+	
     cout<<setw(2)<<endl<< "   ";
     
     
@@ -119,13 +177,14 @@ bool Gameboard::GameState()
     return _still_playing;
 }
 
-void Gameboard::Uncover(int row, int col)
+bool Gameboard::Uncover(int row, int col)
 {
     if((*board)[row][col].Uncover())
     {
         _still_playing = false;
-        std::cout<<"\nYou hit a bomb"<<std::endl;
+		return true;
     }
+	return false;
 }
 
 int Gameboard::getRows()
@@ -133,8 +192,22 @@ int Gameboard::getRows()
     return board->getRow()-2;
 }
 
+int Gameboard::getCols()
+{
+	return board->getColumn();
+}
 
+void Gameboard::SelectRow(int row)
+{
+	selRow = row;
+}
 
+int Gameboard::GetSelectedRow()
+{
+	return selRow;
+}
 
-
-
+void Gameboard::Mark(int row, int col)
+{
+	(*board)[row][col].Mark();
+}

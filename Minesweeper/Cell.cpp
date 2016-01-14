@@ -8,17 +8,17 @@
 
 #include "Cell.hpp"
 
-Cell::Cell() : _grid(nullptr), _prox('W')
+Cell::Cell() : _grid(nullptr), _prox('W'), _mark(false)
 {
     
 }
 
-Cell::Cell(Array2D<Cell> * grid, int row, int col): _exposed(false), _prox('0'), _grid(grid), _row(row), _col(col)
+Cell::Cell(Array2D<Cell> * grid, int row, int col): _exposed(false), _prox('0'), _grid(grid), _row(row), _col(col), _mark(false)
 {
     
 }
 
-Cell::Cell(const Cell & cp) : _exposed(cp._exposed), _prox(cp._prox), _grid(cp._grid)
+Cell::Cell(const Cell & cp) : _exposed(cp._exposed), _prox(cp._prox), _grid(cp._grid), _mark(cp._mark)
 {
     
 }
@@ -78,7 +78,7 @@ bool Cell::Uncover()
 {
     
     bool rval = false;
-    if(_exposed == false)
+    if(_exposed == false && _mark == false)
     {
         _exposed = true;
         
@@ -109,4 +109,15 @@ bool Cell::Uncover()
 bool Cell::getExposure()
 {
     return _exposed;
+}
+
+void Cell::Mark()
+{
+	if(!_exposed)
+		_mark == true ? _mark = false : _mark = true;
+}
+
+bool Cell::MarkStatus()
+{
+	return _mark;
 }

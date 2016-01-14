@@ -6,7 +6,7 @@
 //  Copyright © 2016 Ian Murphy. All rights reserved.
 //
 
-#include <windows.h>
+
 
 
 
@@ -20,61 +20,62 @@ using std::endl;
 
 int main()
 {
-	HANDLE hStdout = 0;
-	COORD cursor;
+	bool exit = false;
 
-	cursor.X = 25;
-	cursor.Y = 5;
-
-	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleCursorPosition(hStdout, cursor);
-	SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_INTENSITY);
-
-	Gameboard minesweeper;
-	minesweeper.InitGame('b');
+	
 	    
-	    
-	    
-	while(minesweeper.GameState())
+	while (!exit)
 	{
-	    minesweeper.Display();
-	    cout<<"\n\nSelect tile to uncover. \nRow:";
-	    int row = 0;
-	    int col = 0;
-	    std::cin>>row;
-	    cout<<"\nColumn: ";
-	    std::cin>>col;
-	        
-	    minesweeper.Uncover(row, col);
-	    minesweeper.Display();
+		Gameboard minesweeper;
+		minesweeper.InitGame('b');
+		while (minesweeper.GameState())
+		{
+			int row = 0;
+			int col = 0;
+			minesweeper.Display();
+			cout << "\n\nEnter the row then the column of the tile.\nRow:";
+			std::cin >> row;
+			minesweeper.SelectRow(row);
+			minesweeper.Display();
+			cout << "\n\nEnter tile to uncover. \nRow:";
+			cout << minesweeper.GetSelectedRow() << endl;
+			cout << "\nColumn: ";
+			std::cin >> col;
+			minesweeper.SelectRow(NULL);
+			if (row < minesweeper.getRows() && col < minesweeper.getCols())
+			{
+				char choice;
+				cout << "Uncover or Mark? (u/m): ";
+				std::cin >> choice;
+				if (toupper(choice) == 'U')
+					minesweeper.Uncover(row, col);
+				else if (toupper(choice) == 'M')
+					minesweeper.Mark(row, col);
+				else
+				{
+
+				}
+			}
+			else
+			{
+				minesweeper.Display();
+				cout << "\n\nEnter tile to uncover. \nRow:";
+				cout << minesweeper.GetSelectedRow() << endl;
+				cout << "\nColumn: ";
+				cout << col << endl;
+			}
+			
+		}
+		minesweeper.Display();
+		cout << "Oh no, you hit a mine!"<<endl;
+		system("pause");
 	}
+	    
+	
 	    
 	
 	    
 	return 0;
 }
 
-//int main() {
-//    Gameboard minesweeper;
-//    minesweeper.InitGame('e');
-//    
-//    
-//    
-//    while(minesweeper.GameState())
-//    {
-//        minesweeper.Display();
-//        cout<<"\n\nSelect tile to uncover. \nRow:";
-//        int row = 0;
-//        int col = 0;
-//        std::cin>>row;
-//        cout<<"\nColumn: ";
-//        std::cin>>col;
-//        
-//        minesweeper.Uncover(row, col);
-//        minesweeper.Display();
-//    }
-//    
-//
-//    
-//    return 0;
-//}
+

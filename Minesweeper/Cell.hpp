@@ -27,11 +27,14 @@ public:
     void SetBomb();
     void SetProx(char p);
     bool Uncover();
+	bool MarkStatus();
+	void Mark();
     
 private:
     Array2D<Cell> * _grid = nullptr;
     bool _exposed;
     char _prox;
+	bool _mark;
     int _row;
     int _col;
     
