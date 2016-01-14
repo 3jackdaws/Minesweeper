@@ -30,16 +30,18 @@ class Gameboard
 {
 public:
     Gameboard();
+	~Gameboard();
     void InitGame(char difficulty);
     void Display();
     bool Uncover(int row, int col);
     bool GameState();
     int getRows();
     int getCols();
-	void SelectRow(int);
-	void SelectColumn(int);
+	bool SelectRow(int);
+	bool SelectColumn(int);
 	int GetSelectedRow();
 	void Mark(int row, int col);
+	bool GetWinStatus();
     
 private:
     void PlaceMines(int mines);
@@ -48,7 +50,9 @@ private:
     bool _still_playing = true;
 	int selRow;
 	int selCol;
+	bool CheckAllMines();
     
+	bool _hasWon = false;
 };
 
 #endif /* Gameboard_hpp */

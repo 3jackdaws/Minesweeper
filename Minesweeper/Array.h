@@ -60,6 +60,7 @@ Array<T>::~Array()
 {
     delete[] m_array;
     m_array = nullptr;
+	cout << "in array d'tor" << endl;
 }
 
 template <typename T>

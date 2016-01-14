@@ -13,6 +13,12 @@ Gameboard::Gameboard(): board(nullptr)
     
 }
 
+Gameboard::~Gameboard()
+{
+	delete board;
+	cout << "in Gameboard d'tor" << endl;
+}
+
 void Gameboard::Display()
 {
 	system("cls");
@@ -102,9 +108,9 @@ void Gameboard::Display()
 			else
 			{
 				if ((*board)[row][col].MarkStatus())
-					cout << setw(2) << "?";
+					cout << setw(2) << "^";
 				else
-					cout<<setw(2)<<"#";
+					cout<<setw(2)<<char(254);
 			}
 			SetConsoleTextAttribute(hStdout, 7);
 
@@ -134,7 +140,9 @@ void Gameboard::InitGame(char difficulty)
         case 'e':
             row = 16, col = 30, mines = 100;
             break;
-            
+		default:
+			//really easy mode
+			row = 16, col = 16, mines = 10;
     }
     board = new Array2D<Cell>(row+2, col+2);
     for(int row = 0; row<board->getRow(); row++)
@@ -183,12 +191,19 @@ bool Gameboard::GameState()
 
 bool Gameboard::Uncover(int row, int col)
 {
+	bool endgame = false;
     if((*board)[row][col].Uncover())
     {
         _still_playing = false;
-		return true;
+		endgame =  true;
     }
-	return false;
+	if (CheckAllMines())
+	{
+		_hasWon = true;
+		endgame = true;
+	}
+
+	return endgame;
 }
 
 int Gameboard::getRows()
@@ -201,14 +216,24 @@ int Gameboard::getCols()
 	return board->getColumn();
 }
 
-void Gameboard::SelectRow(int row)
+bool Gameboard::SelectRow(int row)
 {
-	selRow = row;
+	bool rval = true;
+	if (row > 0 && row < board->getRow() - 1)
+		selRow = row;
+	else
+		rval = false;
+	return rval;
 }
 
-void Gameboard::SelectColumn(int col)
+bool Gameboard::SelectColumn(int col)
 {
-	selCol = col;
+	bool rval = true;
+	if (col > 0 && col < board->getColumn() - 1)
+		selCol = col;
+	else
+		rval = false;
+	return rval;
 }
 
 int Gameboard::GetSelectedRow()
@@ -219,4 +244,30 @@ int Gameboard::GetSelectedRow()
 void Gameboard::Mark(int row, int col)
 {
 	(*board)[row][col].Mark();
+}
+
+bool Gameboard::CheckAllMines()
+{
+	bool AllSquaresUncovered = true;
+	for (int row = 1; row<board->getRow()-1 && AllSquaresUncovered; row++)
+	{
+
+		for (int col = 1; col<board->getColumn()-1 && AllSquaresUncovered; col++)
+		{
+
+			if (!(*board)[row][col].getExposure())
+			{
+				if((*board)[row][col].getProx() != 'B')
+					AllSquaresUncovered = false;
+			}
+
+		}
+
+	}
+	return AllSquaresUncovered;
+}
+
+bool Gameboard::GetWinStatus()
+{
+	return _hasWon;
 }

@@ -9,7 +9,7 @@
 
 
 
-
+#define _CRTDBG_MAP_ALLOC
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -17,60 +17,29 @@ using std::endl;
 #include <iomanip>
 #include <string>
 using std::string;
-#include "Gameboard.hpp"
+#include "Minesweeper.hpp"
 
 int main()
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	bool exit = false;
-
 	
-	    
 	while (!exit)
 	{
-		Gameboard minesweeper;
-		minesweeper.InitGame('b');
-		while (minesweeper.GameState())
+		string choice;
+		cout << "What difficulty do you want to play at?\nChoices are beginner, intermediate, or expert (b, i, e)\nType 'q' to quit\nChoice: ";
+		std::getline(std::cin, choice);
+		char c = tolower(choice.c_str()[0]);
+		if (c == 'q')
 		{
-			string row;
-			string col;
-			minesweeper.Display();
-			cout << "\n\nEnter the row then the column of the tile.\nRow:";
-			std::getline(std::cin, row);
-			minesweeper.SelectRow(atoi(row.c_str()));
-			minesweeper.Display();
-			cout << "\n\nEnter tile to uncover. \nRow:";
-			cout << minesweeper.GetSelectedRow() << endl;
-			cout << "\nColumn: ";
-			std::getline(std::cin, col);
-			minesweeper.SelectColumn(atoi(col.c_str()));
-			if (atoi(row.c_str()) < minesweeper.getRows() && atoi(col.c_str()) < minesweeper.getCols())
-			{
-				minesweeper.Display();
-				string choice;
-				cout << "Uncover or Mark? (u/m): ";
-				std::getline(std::cin, choice);
-				if (choice == "U" || choice == "u")
-					minesweeper.Uncover(atoi(row.c_str()), atoi(col.c_str()));
-				else if (choice == "M" || choice == "m")
-					minesweeper.Mark(atoi(row.c_str()), atoi(col.c_str()));
-				else
-				{
-
-				}
-			}
-			else
-			{
-				minesweeper.Display();
-				cout << "\n\nEnter tile to uncover. \nRow:";
-				cout << minesweeper.GetSelectedRow() << endl;
-				cout << "\nColumn: ";
-				cout << col << endl;
-			}
-			
+			exit = true;
 		}
-		minesweeper.Display();
-		cout << "Oh no, you hit a mine!"<<endl;
-		system("pause");
+		else
+		{
+			Minesweeper newGame(c);
+			newGame.StartGameUI();
+		}
+		
 	}
 	    
 	
