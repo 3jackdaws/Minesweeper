@@ -15,44 +15,65 @@ Gameboard::Gameboard(): board(nullptr)
 
 void Gameboard::Display()
 {
+    cout<<"  ";
+    for (int i = 1; i< board->getColumn(); i++) {
+        if(i%2 == 0)
+            cout<<setw(2)<<i;
+        else
+            cout<<setw(2)<<" ";
+    }
+    cout<<endl;
     for(int row = 1; row<board->getRow()-1; row++)
     {
-        std::cout<<setw(2)<<board->getRow() - row -1<<" ";
+        if(row%2 == 0)
+            cout<<setw(2)<<row;
+        else
+            cout<<setw(2)<<" ";
         for (int col =1; col<board->getColumn()-1; col++)
         {
 #ifdef DEBUGMODE
-            std::cout<<setw(2)<<(*board)[row][col].getProx();
+            cout<<setw(2)<<(*board)[row][col].getProx();
 #else
             if((*board)[row][col].getExposure())
             {
                 char output = (*board)[row][col].getProx();
                 if(output != '0')
-                    std::cout<<setw(2)<<output;
+                    cout<<setw(2)<<output;
                 else
                 {
-                    std::cout<<setw(2)<<" ";
+                    cout<<setw(2)<<" ";
                 }
             }
             else
-                std::cout<<setw(2)<<"#";
+                cout<<setw(2)<<"#";
 
             
 #endif
         }
-        std::cout<<std::endl;
+        cout<<endl;
     }
-    std::cout<<setw(2)<<std::endl<< " ";
-    for (int i = 0; i< board->getColumn(); i++) {
-        std::cout<<setw(2)<<i;
-    }
+    cout<<setw(2)<<endl<< "   ";
+    
     
 }
 
-void Gameboard::InitGame(int row, int col, char difficulty)
+void Gameboard::InitGame(char difficulty)
 {
-    
+    int row, col, mines;
+    switch(difficulty)
+    {
+        case 'b':
+            row =10, col = 10, mines = 10;
+            break;
+        case 'i':
+            row = 16, col = 16, mines = 40;
+            break;
+        case 'e':
+            row = 16, col = 30, mines = 100;
+            break;
+            
+    }
     board = new Array2D<Cell>(row+2, col+2);
-    _difficulty = difficulty;
     for(int row = 0; row<board->getRow(); row++)
     {
         
@@ -69,17 +90,16 @@ void Gameboard::InitGame(int row, int col, char difficulty)
         }
         
     }
-    PlaceMines();
+    PlaceMines(mines);
 }
 
-void Gameboard::PlaceMines()
+void Gameboard::PlaceMines(int mines)
 {
-    int num_mines = _difficulty * 10;
 
     int col = 0;
     int row = 0;
     
-    for(int i = 0; i<num_mines; i++)
+    for(int i = 0; i<mines; i++)
     {
         std::srand(std::time(0)+i*(col+1)*(row+1));
         col = rand()%(board->getColumn()-2)+1;

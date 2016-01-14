@@ -10,11 +10,13 @@
 #define Gameboard_hpp
 
 
-#define DEBUGMODE
+#define _DEBUGMODE
 
 
 #include <cstdlib>
 #include <iostream>
+using std::cout;
+using std::endl;
 #include <ctime>
 
 #include <iomanip>
@@ -27,7 +29,7 @@ class Gameboard
 {
 public:
     Gameboard();
-    void InitGame(int row, int col, int difficulty);
+    void InitGame(char difficulty);
     void Display();
     void Uncover(int row, int col);
     bool GameState();
@@ -35,10 +37,9 @@ public:
     int getCols();
     
 private:
-    void PlaceMines();
+    void PlaceMines(int mines);
     Array2D<Cell> * board;
     
-    int8_t _difficulty;
     bool _still_playing = true;
     
 };

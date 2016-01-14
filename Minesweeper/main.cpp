@@ -32,7 +32,7 @@ using std::endl;
 
 int main() {
     Gameboard minesweeper;
-    minesweeper.InitGame(10, 10, b);
+    minesweeper.InitGame('e');
     
     
     
