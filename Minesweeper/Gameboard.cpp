@@ -46,13 +46,17 @@ void Gameboard::Display()
 #else
 			if (col == selCol && row == selRow)
 			{
-				SetConsoleTextAttribute(hStdout, BACKGROUND_GREEN | BACKGROUND_INTENSITY);
+				SetConsoleTextAttribute(hStdout, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 			}
 			
 			if ((*board)[row][col].getExposure())
 			{
 				char output = (*board)[row][col].getProx();
-				if (output != '0')
+				if (col == selCol && row == selRow)
+				{
+					cout << setw(2) << "x";
+				}
+				else if (output != '0')
 				{
 
 					
@@ -91,15 +95,13 @@ void Gameboard::Display()
 						SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE);
 						break;
 					case 'B':
-						SetConsoleTextAttribute(hStdout, BACKGROUND_RED | BACKGROUND_INTENSITY);
+						SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_INTENSITY);
 						break;
 					}
 					cout << setw(2) << output;
 					SetConsoleTextAttribute(hStdout, 7);
 				}
-
-
-
+				
 				else
 				{
 					cout << setw(2) << " ";
@@ -189,10 +191,11 @@ bool Gameboard::GameState()
     return _still_playing;
 }
 
-bool Gameboard::Uncover(int row, int col)
+bool Gameboard::Uncover()
 {
+	
 	bool endgame = false;
-    if((*board)[row][col].Uncover())
+    if((*board)[selRow][selCol].Uncover())
     {
         _still_playing = false;
 		endgame =  true;
@@ -241,9 +244,53 @@ int Gameboard::GetSelectedRow()
 	return selRow;
 }
 
-void Gameboard::Mark(int row, int col)
+int Gameboard::GetSelectedCol()
 {
-	(*board)[row][col].Mark();
+	return selCol;
+}
+
+void Gameboard::ClearSelect()
+{
+	selCol = 0;
+	selRow = 0;
+}
+
+void Gameboard::Rowmm()
+{
+	if (selRow > 1)
+	{
+		selRow--;
+	}
+}
+
+void Gameboard::Rowpp()
+{
+	if (selRow < board->getRow()-2)
+	{
+		selRow++;
+	}
+}
+
+void Gameboard::Colmm()
+{
+	if (selCol > 1)
+	{
+		selCol--;
+	}
+}
+
+void Gameboard::Colpp()
+{
+	if (selCol < board->getColumn()-2)
+	{
+		selCol++;
+	}
+}
+
+void Gameboard::Mark()
+{
+
+	(*board)[selRow][selCol].Mark();
 }
 
 bool Gameboard::CheckAllMines()

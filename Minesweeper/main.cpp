@@ -10,6 +10,15 @@
 
 
 #define _CRTDBG_MAP_ALLOC
+
+#include <conio.h>
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
+#define KEY_SPACE 0x020
+#define KEY_M 109
+
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -22,10 +31,13 @@ using std::string;
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+
 	bool exit = false;
 	
 	while (!exit)
 	{
+		system("cls");
 		string choice;
 		cout << "What difficulty do you want to play at?\nChoices are beginner, intermediate, or expert (b, i, e)\nType 'q' to quit\nChoice: ";
 		std::getline(std::cin, choice);

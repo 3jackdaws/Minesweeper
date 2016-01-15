@@ -33,14 +33,22 @@ public:
 	~Gameboard();
     void InitGame(char difficulty);
     void Display();
-    bool Uncover(int row, int col);
+    bool Uncover();
     bool GameState();
     int getRows();
     int getCols();
 	bool SelectRow(int);
 	bool SelectColumn(int);
 	int GetSelectedRow();
-	void Mark(int row, int col);
+	int GetSelectedCol();
+	void ClearSelect();
+
+	void Rowmm();
+	void Rowpp();
+	void Colmm();
+	void Colpp();
+
+	void Mark();
 	bool GetWinStatus();
     
 private:
