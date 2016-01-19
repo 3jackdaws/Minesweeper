@@ -1,33 +1,82 @@
-//
-//  Cell.cpp
-//  Minesweeper
-//
-//  Created by Ian Murphy on 1/13/16.
-//  Copyright © 2016 Ian Murphy. All rights reserved.
-//
+/*************************************************************
+* Author:		Ian Murphy
+* Filename:		Cell.cpp
+* Date Created:	1/18/16
+* Modifications:	1/18/16 - added documentation
+**************************************************************/
 
 #include "Cell.hpp"
 
+/**********************************************************************
+* Purpose: Default ctor for cell.
+*
+* Precondition:
+*     none
+*
+* Postcondition:
+*      sets _grid to nullptr, _prox to 'W', and _mark to false
+*
+************************************************************************/
 Cell::Cell() : _grid(nullptr), _prox('W'), _mark(false)
 {
     
 }
 
+/**********************************************************************
+* Purpose: 3 arg ctor for cell.
+*
+* Precondition:
+*     none
+*
+* Postcondition:
+*      sets _grid to grid, _prox to 'W', and _mark to false, and _row to row, and _col to col
+*
+************************************************************************/
 Cell::Cell(Array2D<Cell> * grid, int row, int col): _exposed(false), _prox('0'), _grid(grid), _row(row), _col(col), _mark(false)
 {
     
 }
 
+/**********************************************************************
+* Purpose: copy ctor for cell.
+*
+* Precondition:
+*     cp must be an object
+*
+* Postcondition:
+*      sets everything equal to cp
+*
+************************************************************************/
 Cell::Cell(const Cell & cp) : _exposed(cp._exposed), _prox(cp._prox), _grid(cp._grid), _mark(cp._mark)
 {
     
 }
 
+/**********************************************************************
+* Purpose: d'tor for cell.
+*
+* Precondition:
+*     cell is instantiated
+*
+* Postcondition:
+*      cell is gone
+*
+************************************************************************/
 Cell::~Cell()
 {
     
 }
 
+/**********************************************************************
+* Purpose: op = overload for cell.
+*
+* Precondition:
+*     both objects are instantiated
+*
+* Postcondition:
+*      sets cell to values in rhs
+*
+************************************************************************/
 Cell & Cell::operator=(Cell &rhs)
 {
     if(&rhs != this)
@@ -41,6 +90,16 @@ Cell & Cell::operator=(Cell &rhs)
     return *this;
 }
 
+/**********************************************************************
+* Purpose: increments the _prox value in cell
+*
+* Precondition:
+*     _prox must have some value
+*
+* Postcondition:
+*      sets _prox to 1 more than its previous value
+*
+************************************************************************/
 char Cell::operator++(int)
 {
     char old = _prox;
@@ -50,6 +109,17 @@ char Cell::operator++(int)
     return old;
 }
 
+/**********************************************************************
+* Purpose: Tells the cell object that it is now a bomb
+*
+* Precondition:
+*     none, really
+*
+* Postcondition:
+*      _prox is set to 'B'
+		all cells around the cell have their _prox incremented
+*
+************************************************************************/
 void Cell::SetBomb()
 {
     _prox = 'B';
@@ -64,16 +134,47 @@ void Cell::SetBomb()
     
 }
 
+/**********************************************************************
+* Purpose: Sets _prox to p.
+*
+* Precondition:
+*     none
+*
+* Postcondition:
+*      _prox is now p
+*
+************************************************************************/
 void Cell::SetProx(char p)
 {
     _prox = p;
 }
 
+/**********************************************************************
+* Purpose: returns the value in _prox.
+*
+* Precondition:
+*     _prox needs a value
+*
+* Postcondition:
+*      returns _prox
+*
+************************************************************************/
 char Cell::getProx()
 {
     return _prox;
 }
 
+/**********************************************************************
+* Purpose: Uncovers the current cell.
+*
+* Precondition:
+*     cell must be real
+*
+* Postcondition:
+*     Cell is set to uncovered, will call uncover on all cells around it if the _prox of the current cell is 0
+		will return true if a bomb is uncovered
+*
+************************************************************************/
 bool Cell::Uncover()
 {
     
@@ -106,17 +207,47 @@ bool Cell::Uncover()
     return rval;
 }
 
+/**********************************************************************
+* Purpose: returns the cells exposure status
+*
+* Precondition:
+*     none
+*
+* Postcondition:
+*      returns _exposed
+*
+************************************************************************/
 bool Cell::getExposure()
 {
     return _exposed;
 }
 
+/**********************************************************************
+* Purpose: Marks a cell.
+*
+* Precondition:
+*     none
+*
+* Postcondition:
+*      toggles _mark for a cell
+*
+************************************************************************/
 void Cell::Mark()
 {
 	if(!_exposed)
 		_mark == true ? _mark = false : _mark = true;
 }
 
+/**********************************************************************
+* Purpose: returns the cell's mark status
+
+* Precondition:
+*     none
+*
+* Postcondition:
+*      returns _mark
+*
+************************************************************************/
 bool Cell::MarkStatus()
 {
 	return _mark;

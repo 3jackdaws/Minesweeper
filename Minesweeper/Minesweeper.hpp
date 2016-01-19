@@ -1,3 +1,26 @@
+/************************************************************************
+* Class: Array
+*
+* Purpose: This class creates a dynamic one-dimensional array that can be * started at any base.
+*
+* public:
+	Minesweeper(char d);
+		starts up a game with the given difficulty
+	Minesweeper(const Minesweeper &);
+		would copy the entire game if that made sense
+	~Minesweeper();
+		destructor
+	Minesweeper & operator = (Minesweeper & rhs);
+		kinda like a copy ctor only not
+
+	void StartGameUI();
+		all the UI interaction is handled here
+
+
+
+*		...
+*************************************************************************/
+
 #ifndef MINESWEEPER_H
 #define MINESWEEPER_H
 #include "Gameboard.hpp"
@@ -24,13 +47,7 @@ public:
 	void StartGameUI();
 
 private:
-	void AppendToUIBuffer(string app);
-	string GetUIBuffer();
-	void ClearUIBuffer();
-	void CreateErrorMsg(string msg);
-	void ClearErrorMsg();
-	string GetErrorMsg();
-	bool SelectChoice(char choice);
+
 
 	char _difficulty;
 	Gameboard _board;

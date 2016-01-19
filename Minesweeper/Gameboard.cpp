@@ -19,6 +19,12 @@ Gameboard::~Gameboard()
 	cout << "in Gameboard d'tor" << endl;
 }
 
+Gameboard::Gameboard(const Gameboard & gb)
+{
+	throw Exception("Don't use this, it does nothing");
+	//don't use this
+}
+
 void Gameboard::Display()
 {
 	system("cls");
@@ -95,7 +101,7 @@ void Gameboard::Display()
 						SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE);
 						break;
 					case 'B':
-						SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_INTENSITY);
+						SetConsoleTextAttribute(hStdout, FOREGROUND_BLUE | FOREGROUND_GREEN |FOREGROUND_INTENSITY);
 						break;
 					}
 					cout << setw(2) << output;
@@ -126,6 +132,12 @@ void Gameboard::Display()
     cout<<setw(2)<<endl<< "   ";
     
     
+}
+
+Gameboard & Gameboard::operator=(const Gameboard & rhs)
+{
+
+	return *this;
 }
 
 void Gameboard::InitGame(char difficulty)

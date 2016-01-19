@@ -1,23 +1,31 @@
-//
-//  main.cpp
-//  Minesweeper
-//
-//  Created by Ian Murphy on 1/11/16.
-//  Copyright © 2016 Ian Murphy. All rights reserved.
-//
+/*************************************************************
+* Author:		Ian Murphy
+* Filename:		main.cpp
+* Date Created:	1/18/2016
+* Modifications:	1/18/16 - Added documentation
+*  			
+**************************************************************\
 
+/*************************************************************
+*
+* Lab/Assignment: Lab 1 – Minesweeper
+*
+* Overview:
+*	This program implements the game minesweeper in the console.  
+*
+* Input:
+*	Input consists of keyboard commands that correspond to certain actions.  The program will alert users to possible inputs.
+*
+* Output:
+*	The program outputs the state of the minesweeper gameboard after most inputs.  Output is to the console.
+*
+************************************************************/
 
 
 
 #define _CRTDBG_MAP_ALLOC
 
-#include <conio.h>
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_LEFT 75
-#define KEY_RIGHT 77
-#define KEY_SPACE 0x020
-#define KEY_M 109
+
 
 #include <iostream>
 using std::cout;
@@ -31,8 +39,6 @@ using std::string;
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
-
 	bool exit = false;
 	
 	while (!exit)
@@ -51,13 +57,7 @@ int main()
 			Minesweeper newGame(c);
 			newGame.StartGameUI();
 		}
-		
 	}
-	    
-	
-	    
-	
-	    
 	return 0;
 }
 

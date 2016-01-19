@@ -82,39 +82,3 @@ void Minesweeper::StartGameUI()
 	system("pause");
 }
 
-void Minesweeper::AppendToUIBuffer(string app)
-{
-	_UIBuffer += app;
-}
-
-string Minesweeper::GetUIBuffer()
-{
-	return _UIBuffer;
-}
-
-void Minesweeper::ClearUIBuffer()
-{
-	_UIBuffer = "";
-}
-
-void Minesweeper::CreateErrorMsg(string msg)
-{
-	_errorMsg = msg;
-}
-
-void Minesweeper::ClearErrorMsg()
-{
-	_errorMsg = "";
-}
-
-string Minesweeper::GetErrorMsg()
-{
-	return _errorMsg;;
-}
-
-bool Minesweeper::SelectChoice(char choice)
-{
-	if (toupper(choice) == 'C' || toupper(choice) == 'U' || toupper(choice) == 'M')
-		return true;
-	return false;
-}
